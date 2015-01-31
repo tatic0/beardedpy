@@ -1,5 +1,5 @@
 # python port of tail
-NAME
+#NAME
 #       tail - output the last part of files
 #
 #SYNOPSIS

@@ -9,25 +9,19 @@ pure python implementation of the unix 'head' command
 """
 
 # CLI options
-parser = argparse.ArgumentParser(description='Print  the first 10 lines of each FILE to standard output..')
+parser = argparse.ArgumentParser(description='Print  the first 10 lines of each FILE to standard output.',
+  epilog='This is a pure python implementation of head')
 parser.add_argument('-n', '--lines', help='print the first N lines of FILE', type=int, dest='nlines', default=10)
 parser.add_argument('-c', '--bytes', help='print the first K bytes of FILE', type=int, dest='nbytes')
 parser.add_argument('-q', '--quiet', help='never print headers giving file names', action="store_true")
 parser.add_argument('-v', '--verbose', help='always print headers giving file names', action="store_true")
-parser.add_argument('filename', type=str, help='bar help')
+parser.add_argument('filename', type=str, help='input file')
 
 arguments = parser.parse_args()
 
 
-#python port of head
-
-
-#Usage: head [OPTION]... [FILE]...
-#Print the first 10 lines of each FILE to standard output.
 #With more than one FILE, precede each with a header giving the file name.
 #With no FILE, or when FILE is -, read standard input.
-#
-#Mandatory arguments to long options are mandatory for short options too.
 #  -c, --bytes=[-]K         print the first K bytes of each file;
 #                             with the leading '-', print all but the last
 #                             K bytes of each file
@@ -35,8 +29,6 @@ arguments = parser.parse_args()
 #                             with the leading '-', print all but the last
 #                             K lines of each file
 #  -q, --quiet, --silent    never print headers giving file names
-#  -v, --verbose            always print headers giving file names
-#      --help     display this help and exit
 #      --version  output version information and exit
 #
 #K may have a multiplier suffix:
@@ -46,21 +38,18 @@ arguments = parser.parse_args()
 
 import sys
 import io
-#import linecache ## finally, not a good idea
 
-if arguments.verbose==True:
-  print("verbose mode ON")
 
-#inputfile = sys.argv[1]
 inputfile = arguments.filename
-#linestoread = int(sys.argv[2])
 linestoread = arguments.nlines
 bytestoread = arguments.nbytes
 rawdata = open(inputfile, 'r')
 
+if arguments.verbose==True:
+  #print("verbose mode ON")
+  print("file %s: " %inputfile)
 
 if isinstance(bytestoread, int):
-  print('true')
   with io.open(inputfile, 'rb') as file:
     print(file.read(bytestoread))
 else:
