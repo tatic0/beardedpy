@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #python port of head
 
 import sys
@@ -9,15 +10,14 @@ pure python implementation of the unix 'head' command
 
 # CLI options
 parser = argparse.ArgumentParser(description='Print  the first 10 lines of each FILE to standard output..')
-parser.add_argument('-n', '--lines', help='print the first N lines of FILE', type=int, dest='nlines')
+parser.add_argument('-n', '--lines', help='print the first N lines of FILE', type=int, dest='nlines', default=10)
 parser.add_argument('-c', '--bytes', help='print the first K bytes of FILE', type=int, dest='nbytes')
 parser.add_argument('-q', '--quiet', help='never print headers giving file names', action="store_true")
 parser.add_argument('-v', '--verbose', help='always print headers giving file names', action="store_true")
+parser.add_argument('filename', type=str, help='bar help')
 
 arguments = parser.parse_args()
 
-if arguments.verbose==True:
-  print("verbose mode ON")
 
 #python port of head
 
@@ -45,13 +45,25 @@ if arguments.verbose==True:
 
 
 import sys
+import io
 #import linecache ## finally, not a good idea
 
-inputfile = sys.argv[1]
-linestoread = int(sys.argv[2])
+if arguments.verbose==True:
+  print("verbose mode ON")
 
+#inputfile = sys.argv[1]
+inputfile = arguments.filename
+#linestoread = int(sys.argv[2])
+linestoread = arguments.nlines
+bytestoread = arguments.nbytes
 rawdata = open(inputfile, 'r')
 
-for i in range(0,linestoread):
-  print(rawdata.readline().rstrip())
+
+if isinstance(bytestoread, int):
+  print('true')
+  with io.open(inputfile, 'rb') as file:
+    print(file.read(bytestoread))
+else:
+  for i in range(0,linestoread):
+    print(rawdata.readline().rstrip())
 
